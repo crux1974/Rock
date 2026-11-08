@@ -7,15 +7,15 @@ app = Flask(__name__)
 
 # Словник ваших каналів
 CHANNELS = {
-    "SharpTone Records TV": "https://www.youtube.com/@SharpToneRecords/live",
+    "SharpTone Records TV": "https://www.youtube.com/live/-BJg05my_xE",
     "Frontiers Music srl TV": "https://www.youtube.com/@FrontiersMusicsrl/live",
     "Thriller Records TV": "https://www.youtube.com/@ThrillerRecords/live",
     "hate5six TV": "https://www.youtube.com/@hate5six/live",
     "KISS TV": "https://www.youtube.com/@KissTheBand/live",
     "Metallica TV": "https://www.youtube.com/@metallica/live",
     "Nuclear Blast Records TV": "https://www.youtube.com/@nuclearblastrecords/live",
-    "Nuclear Blast Thrash/Speed TV": "https://www.youtube.com/@NuclearBlastThrashSpeed/live",
-    "Nuclear Blast Power/Heavy/Symphonic TV": "https://www.youtube.com/@NuclearBlastPowerHeavySymphonic/live"
+    "Nuclear Blast Thrash/Speed TV": "https://www.youtube.com/live/EZP9z9CMdYg",
+    "Nuclear Blast Power/Heavy/Symphonic TV": "https://www.youtube.com/live/aiS93HDWPOM"
 }
 
 def generate_m3u():
