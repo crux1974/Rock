@@ -7,15 +7,15 @@ app = Flask(__name__)
 
 # Словник ваших каналів
 CHANNELS = {
-    "SharpTone Records TV": "https://www.youtube.com/@SharpToneRecords/live",
-    "Frontiers Music srl TV": "https://www.youtube.com/live/UiCK7SCpSIA",
-    "Thriller Records TV": "https://www.youtube.com/@thrillerrecords/live",
-    "hate5six TV": "https://www.youtube.com/@hate5six/live",
-    "KISS TV": "https://www.youtube.com/live/TDSCd8xUpcs",
-    "Metallica TV": "https://www.youtube.com/@metallica/live",
-    "Nuclear Blast Records TV": "ttps://www.youtube.com/@NuclearBlastRecords/live",
-    "Nuclear Blast Thrash/Speed TV": "https://www.youtube.com/live/EZP9z9CMdYg",
-    "Nuclear Blast Power/Heavy/Symphonic TV": "https://www.youtube.com/live/aiS93HDWPOM"
+    "SharpTone Records TV": "https://www.youtube.com/watch?v=-BJg05my_xE",
+    "Frontiers Music srl TV": "https://www.youtube.com/watch?v=UiCK7SCpSIA",
+    "Thriller Records TV": "https://www.youtube.com/watch?v=O_ZO3hzSdAs",
+    "hate5six TV": "https://www.youtube.com/watch?v=BOBpo9bTYAE",
+    "KISS TV": "https://www.youtube.com/watch?v=TDSCd8xUpcs",
+    "Metallica TV": "https://www.youtube.com/watch?v=1fz60gNnSdU",
+    "Nuclear Blast Records TV": "https://www.youtube.com/watch?v=3LWMFjRZQ6k",
+    "Nuclear Blast Thrash/Speed TV": "https://www.youtube.com/watch?v=EZP9z9CMdYg",
+    "Nuclear Blast Power/Heavy/Symphonic TV": "https://www.youtube.com/watch?v=aiS93HDWPOM"
 }
 
 def generate_m3u():
