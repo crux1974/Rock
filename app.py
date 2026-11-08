@@ -5,31 +5,36 @@ import git
 
 app = Flask(__name__)
 
-# Словник ваших каналів
+# Словник актуальних каналів
 CHANNELS = {
-    "SharpTone Records TV": "ytsearch: SharpTone Records live stream",
-    "Frontiers Music srl TV": "ytsearch: Frontiers Music srl live stream",
-    "Thriller Records TV": "ytsearch: Thriller Records live stream",
-    "hate5six TV": "ytsearch: hate5six live stream",
-    "KISS TV": "ytsearch: KISS live stream",
-    "Metallica TV": "ytsearch: Metallica live stream",
-    "Nuclear Blast Records TV": "ytsearch: Nuclear Blast Records live stream",
-    "Nuclear Blast Thrash/Speed TV": "ytsearch: Nuclear Blast Thrash Speed live stream",
-    "Nuclear Blast Power/Heavy/Symphonic TV": "ytsearch: Nuclear Blast Power Heavy Symphonic live stream"
+    "SharpTone Records TV": "https://www.youtube.com/watch?v=-BJg05my_xE",
+    "Frontiers Music srl TV": "https://www.youtube.com/watch?v=UiCK7SCpSIA",
+    "Thriller Records TV": "https://www.youtube.com/watch?v=O_ZO3hzSdAs",
+    "hate5six TV": "https://www.youtube.com/watch?v=BOBpo9bTYAE",
+    "KISS TV": "https://www.youtube.com/watch?v=mGarleVlICU",
+    "Metallica TV": "https://www.youtube.com/watch?v=7yh2Yjlghf0",
+    "Nuclear Blast Records TV": "https://www.youtube.com/watch?v=3LWMFjRZQ6k"
 }
 
 def generate_m3u():
     m3u_content = "#EXTM3U\n"
     
+    # Налаштування yt-dlp з імітацією браузера для обходу захисту
     ydl_opts = {
         'format': 'best',
         'quiet': True,
         'no_warnings': True,
         'extract_flat': False,
+        'http_headers': {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept-Language': 'en-US,en;q=0.9',
+        }
     }
     
-    if os.path.exists('cookies.txt'):
-        ydl_opts['cookiefile'] = 'cookies.txt'
+    # Перевірка та підключення cookies.txt
+    cookie_path = os.path.abspath('cookies.txt')
+    if os.path.exists(cookie_path):
+        ydl_opts['cookiefile'] = cookie_path
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         for name, url in CHANNELS.items():
@@ -46,7 +51,7 @@ def generate_m3u():
 def push_to_github(content):
     try:
         token = os.environ.get('GITHUB_TOKEN')
-        repo_name = os.environ.get('GITHUB_REPOSITORY') # наприклад: crux1974/Rock-c4rx
+        repo_name = os.environ.get('GITHUB_REPOSITORY')
         
         if not token or not repo_name:
             print("Змінні середовища GITHUB_TOKEN або GITHUB_REPOSITORY не налаштовані!")
@@ -55,21 +60,17 @@ def push_to_github(content):
         repo_path = '.'
         repo = git.Repo(repo_path)
         
-        # Налаштовуємо ім'я та пошту для комітів, щоб git не сварився
         with repo.config_writer() as config:
             config.set_value('user', 'name', 'Render Bot')
             config.set_value('user', 'email', 'bot@render.com')
 
-        # Записуємо файл streams.m3u8 локально
         file_path = os.path.join(repo_path, 'streams.m3u8')
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(content)
             
-        # Робимо git commit
         repo.index.add(['streams.m3u8'])
         repo.index.commit("Auto-update streams.m3u8 via Render")
         
-        # Автоматично створюємо або оновлюємо remote origin з токеном
         remote_url = f"https://{token}@github.com/{repo_name}.git"
         if 'origin' in [r.name for r in repo.remotes]:
             origin = repo.remote(name='origin')
