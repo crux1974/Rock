@@ -1,0 +1,27 @@
+name: Update IPTV Playlist
+
+on:
+  schedule:
+    - cron: '0 */6 * * *' # Запускатиметься кожні 6 годин автоматично
+  workflow_dispatch: # Дозволяє запускати вручну кнопкою на сайті GitHub
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install yt-dlp GitPython
+
+      - name: Run script
+        run: python update_playlist.py
