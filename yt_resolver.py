@@ -41,40 +41,58 @@ def load_channels(path=CHANNELS_FILE):
     return channels
 
 
-def _opts():
+def _opts(proxy=None, clients=None):
     opts = {"quiet": True, "no_warnings": True, "noplaylist": True, "socket_timeout": 30}
     if os.path.isfile(COOKIES_FILE) and os.path.getsize(COOKIES_FILE) > 0:
         opts["cookiefile"] = COOKIES_FILE
-    if PROXY:
-        opts["proxy"] = PROXY
+    proxy = PROXY if proxy is None else proxy
+    if proxy:
+        opts["proxy"] = proxy
+    if clients:
+        opts["extractor_args"] = {"youtube": {"player_client": clients}}
     return opts
+
+
+# Способи по черзі: якщо YouTube просить «not a bot», пробуємо інший клієнт,
+# а потім — без VPN (інколи IP WARP «засвічений», а пряме з'єднання ні).
+_STRATEGIES = [
+    {"proxy": None, "clients": None},
+    {"proxy": None, "clients": ["tv", "web_safari"]},
+    {"proxy": "", "clients": None},
+    {"proxy": "", "clients": ["tv", "web_safari"]},
+]
+
+
+def _extract(url, strategy):
+    with yt_dlp.YoutubeDL(_opts(**strategy)) as ydl:
+        info = ydl.extract_info(url, download=False)
+    if not info.get("is_live"):
+        raise RuntimeError(f"зараз не в ефірі (статус: {info.get('live_status')})")
+    stream = info.get("manifest_url") or next(
+        (f["manifest_url"] for f in reversed(info.get("formats") or [])
+         if f.get("manifest_url")), None)
+    if not stream:
+        raise RuntimeError("yt-dlp не повернув посилання на трансляцію")
+    m = re.search(r"expire[=/](\d+)", stream)
+    return stream, int(m.group(1)) if m else int(time.time()) + 3600
 
 
 def resolve(url, retries=2):
     """Повертає (посилання_на_m3u8, час_закінчення_unix). Кидає RuntimeError, якщо не вдалось.
 
-    Береться master-плейлист HLS: у ньому всі якості та звук. Посилання на окрему
-    якість YouTube тепер віддає без звуку, тому їх не використовуємо.
+    Береться master-плейлист HLS: у ньому всі якості та звук.
     """
+    strategies = [st for st in _STRATEGIES if st["proxy"] != "" or PROXY]  # без VPN — дублі не потрібні
     last_err = None
     for attempt in range(retries + 1):
-        try:
-            with yt_dlp.YoutubeDL(_opts()) as ydl:
-                info = ydl.extract_info(url, download=False)
-            if not info.get("is_live"):
-                raise RuntimeError(f"зараз не в ефірі (статус: {info.get('live_status')})")
-            stream = info.get("manifest_url") or next(
-                (f["manifest_url"] for f in reversed(info.get("formats") or [])
-                 if f.get("manifest_url")), None)
-            if not stream:
-                raise RuntimeError("yt-dlp не повернув посилання на трансляцію")
-            m = re.search(r"expire[=/](\d+)", stream)
-            return stream, int(m.group(1)) if m else int(time.time()) + 3600
-        except Exception as e:
-            last_err = e
-            if "не в ефірі" in str(e):
-                break
-            time.sleep(5 * (attempt + 1))
+        for st in strategies:
+            try:
+                return _extract(url, st)
+            except Exception as e:
+                last_err = e
+                if "не в ефірі" in str(e):
+                    raise RuntimeError(str(e))
+        time.sleep(5 * (attempt + 1))
     raise RuntimeError(str(last_err).replace("\n", " "))
 
 
@@ -92,7 +110,7 @@ def best_quality_manifest(master_url):
     Повертає текст m3u8.
     """
     with yt_dlp.YoutubeDL(_opts()) as ydl:
-        text = ydl.urlopen(master_url).read().decode("utf-8")
+        text = ydl.urlopen(master_url).read().decode("utf-8")  # noqa
     lines = text.splitlines()
 
     header, media, variants = [], [], []
