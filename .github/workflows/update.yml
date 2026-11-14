@@ -82,7 +82,7 @@ jobs:
           rm -f cookies.txt
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add streams.m3u8
+          git add streams.m3u8 channels/ 2>/dev/null || git add streams.m3u8
           if git diff --cached --quiet; then
             echo "Змін немає"
             exit 0

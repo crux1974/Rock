@@ -13,7 +13,10 @@ import time
 
 from flask import Flask, Response, abort, redirect, request
 
-from yt_resolver import load_channels, resolve
+from yt_resolver import best_quality_manifest, load_channels, resolve
+
+# BEST_QUALITY=0 — віддавати повний набір якостей (плеєр обирає сам)
+BEST_QUALITY = os.environ.get("BEST_QUALITY", "1") != "0"
 
 REFRESH_MARGIN = 15 * 60  # оновлювати за 15 хв до закінчення
 FAIL_RETRY = 60           # після помилки пробувати знову через 60 с
@@ -69,6 +72,13 @@ def live(key):
     if not url:
         return Response(f"Не вдалося отримати трансляцію: {err}\n", status=502,
                         mimetype="text/plain")
+    if BEST_QUALITY:
+        try:
+            return Response(best_quality_manifest(url),
+                            mimetype="application/vnd.apple.mpegurl",
+                            headers={"Cache-Control": "no-store"})
+        except Exception as e:
+            print(f"[{key}] фільтр якості не спрацював: {e}", flush=True)
     resp = redirect(url, 302)
     resp.headers["Cache-Control"] = "no-store"
     return resp

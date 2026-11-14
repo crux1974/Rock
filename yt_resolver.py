@@ -76,3 +76,53 @@ def resolve(url, retries=2):
                 break
             time.sleep(5 * (attempt + 1))
     raise RuntimeError(str(last_err).replace("\n", " "))
+
+
+_ATTR_RE = re.compile(r'([A-Z0-9-]+)=("[^"]*"|[^,]*)')
+
+
+def _attrs(line):
+    return {k: v.strip('"') for k, v in _ATTR_RE.findall(line.split(":", 1)[1])}
+
+
+def best_quality_manifest(master_url):
+    """Завантажує master-плейлист і лишає в ньому тільки найвищу якість (+ її звук).
+
+    Плеєр тоді одразу грає найкращу якість і не може «з'їхати» на низьку.
+    Повертає текст m3u8.
+    """
+    with yt_dlp.YoutubeDL(_opts()) as ydl:
+        text = ydl.urlopen(master_url).read().decode("utf-8")
+    lines = text.splitlines()
+
+    header, media, variants = [], [], []
+    i = 0
+    while i < len(lines):
+        line = lines[i]
+        if line.startswith("#EXT-X-STREAM-INF:"):
+            uri = lines[i + 1] if i + 1 < len(lines) else ""
+            variants.append((line, uri))
+            i += 2
+            continue
+        if line.startswith("#EXT-X-MEDIA:"):
+            media.append(line)
+        elif line.startswith("#EXTM3U") or line.startswith("#EXT-X-INDEPENDENT-SEGMENTS") \
+                or line.startswith("#EXT-X-VERSION"):
+            header.append(line)
+        i += 1
+
+    if not variants:
+        return text  # невідомий формат — віддаємо як є
+
+    def score(v):
+        a = _attrs(v[0])
+        w, _, h = a.get("RESOLUTION", "0x0").partition("x")
+        return (int(h or 0), float(a.get("FRAME-RATE", 0) or 0), int(a.get("BANDWIDTH", 0) or 0))
+
+    best_inf, best_uri = max(variants, key=score)
+    # Лишаємо звук і субтитри, на які посилається обрана якість
+    a = _attrs(best_inf)
+    groups = {a[k] for k in ("AUDIO", "SUBTITLES") if a.get(k)}
+    keep_media = [m for m in media if _attrs(m).get("GROUP-ID") in groups]
+    out = (header or ["#EXTM3U"]) + keep_media + [best_inf, best_uri]
+    return "\n".join(out) + "\n"
