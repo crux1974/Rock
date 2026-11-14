@@ -120,9 +120,11 @@ def best_quality_manifest(master_url):
         return (int(h or 0), float(a.get("FRAME-RATE", 0) or 0), int(a.get("BANDWIDTH", 0) or 0))
 
     best_inf, best_uri = max(variants, key=score)
-    # Лишаємо звук і субтитри, на які посилається обрана якість
-    a = _attrs(best_inf)
-    groups = {a[k] for k in ("AUDIO", "SUBTITLES") if a.get(k)}
-    keep_media = [m for m in media if _attrs(m).get("GROUP-ID") in groups]
+    # Лишаємо тільки звук обраної якості. Субтитри прибираємо: вбудований плеєр
+    # LG webOS погано підтримує теги субтитрів у HLS, а на живому ефірі вони не потрібні.
+    audio = _attrs(best_inf).get("AUDIO")
+    keep_media = [m for m in media if audio and _attrs(m).get("GROUP-ID") == audio
+                  and _attrs(m).get("TYPE") == "AUDIO"]
+    best_inf = re.sub(r',SUBTITLES="[^"]*"', "", best_inf)
     out = (header or ["#EXTM3U"]) + keep_media + [best_inf, best_uri]
     return "\n".join(out) + "\n"
