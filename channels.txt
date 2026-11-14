@@ -1,0 +1,15 @@
+# Список каналів. Формат:  Назва | посилання | група (необов'язково)
+# Краще давати посилання виду https://www.youtube.com/@Канал/live —
+# воно завжди веде на поточну трансляцію, навіть якщо вона перезапустилась.
+# Рядки з # на початку ігноруються.
+
+SharpTone Records TV     | https://www.youtube.com/@SharpToneRecords/live    | Rock
+Frontiers Music srl TV   | https://www.youtube.com/@frontiersmusicsrl/live   | Rock
+Thriller Records TV      | https://www.youtube.com/@thrillerrecords/live     | Rock
+hate5six TV              | https://www.youtube.com/@hate5six/live            | Rock
+Nuclear Blast Records TV | https://www.youtube.com/@NuclearBlastRecords/live | Rock
+
+# Ці трансляції завершились (14.11.2026) — це були фанатські стріми, не офіційні канали.
+# Знайдіть нові посилання і розкоментуйте:
+# KISS TV     | https://www.youtube.com/watch?v=mGarleVlICU | Rock
+# Metallica TV | https://www.youtube.com/watch?v=7yh2Yjlghf0 | Rock

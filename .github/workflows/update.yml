@@ -2,14 +2,28 @@ name: Update IPTV Playlist
 
 on:
   schedule:
-    - cron: '0 */6 * * *' # Запускатиметься кожні 6 годин автоматично
-  workflow_dispatch: # Дозволяє запускати вручну кнопкою на сайті GitHub
+    # Посилання YouTube живуть ~6 год, а cron GitHub може запізнюватись,
+    # тому оновлюємо кожні 3 години (на 17-й хвилині — менше черги).
+    - cron: '17 */3 * * *'
+  workflow_dispatch:        # ручний запуск кнопкою на сайті
+  push:
+    paths:
+      - 'channels.txt'
+      - 'update_playlist.py'
+      - 'yt_resolver.py'
+      - '.github/workflows/update.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-playlist
+  cancel-in-progress: false
 
 jobs:
   update:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    timeout-minutes: 20
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -17,11 +31,42 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.12'
+          cache: pip
 
-      - name: Install dependencies
+      - name: Set up Deno (JS runtime, потрібен yt-dlp для YouTube)
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Install dependencies (завжди найновіший yt-dlp)
+        run: pip install -U -r requirements-actions.txt
+
+      - name: Cookies from secret (необов'язково)
+        env:
+          YT_COOKIES: ${{ secrets.YT_COOKIES }}
         run: |
-          pip install yt-dlp GitPython
+          if [ -n "$YT_COOKIES" ]; then
+            printf '%s\n' "$YT_COOKIES" > cookies.txt
+            echo "cookies.txt створено із секрету"
+          else
+            echo "Секрет YT_COOKIES не задано — працюю без cookies"
+          fi
 
-      - name: Run script
+      - name: Generate playlist
         run: python update_playlist.py
+
+      - name: Commit and push
+        if: always()
+        run: |
+          rm -f cookies.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add streams.m3u8
+          if git diff --cached --quiet; then
+            echo "Змін немає"
+            exit 0
+          fi
+          git commit -m "Auto-update streams.m3u8 [$(date -u +'%Y-%m-%d %H:%M UTC')]"
+          git pull --rebase --autostash
+          git push

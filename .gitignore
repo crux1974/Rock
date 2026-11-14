@@ -1,0 +1,6 @@
+# Ніколи не комітити cookies — це доступ до вашого акаунта Google
+cookies.txt
+*.cookies
+__pycache__/
+*.pyc
+.venv/

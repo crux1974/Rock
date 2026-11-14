@@ -1,0 +1,13 @@
+services:
+  rock:
+    build: .
+    container_name: rock
+    restart: unless-stopped
+    ports:
+      - "10000:10000"
+    volumes:
+      - ./channels.txt:/data/channels.txt:ro
+      # - ./cookies.txt:/data/cookies.txt:ro   # якщо YouTube просить «not a bot»
+    environment:
+      - TZ=Europe/Warsaw
+      # - YTDLP_PROXY=http://gluetun:8888      # лише якщо додасте VPN-контейнер
