@@ -29,10 +29,13 @@ def main():
     for i, ch in enumerate(channels, 1):
         print(f"[{i}/{len(channels)}] {ch['name']} … ", end="", flush=True)
         try:
-            url, expire = resolve(ch["url"])
+            url, expire = resolve(ch["url"], retries=1)
         except RuntimeError as e:
             print(f"ПОМИЛКА: {e}")
             lines.append(f"# {ch['name']}: недоступний ({str(e)[:120]})")
+            if ok == 0 and i >= 2 and "not a bot" in str(e):
+                print("Перші канали заблоковано («not a bot») — схоже, заблокована вся адреса. Зупиняюсь.")
+                break
             continue
         if BEST_QUALITY:
             try:

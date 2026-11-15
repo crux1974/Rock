@@ -2,9 +2,9 @@ name: Update IPTV Playlist
 
 on:
   schedule:
-    # Посилання YouTube живуть ~6 год, а cron GitHub може запізнюватись,
-    # тому оновлюємо кожні 3 години (на 17-й хвилині — менше черги).
-    - cron: '17 */3 * * *'
+    # Посилання YouTube живуть ~6 год, а GitHub інколи пропускає запуски за розкладом,
+    # тому пробуємо щогодини: навіть якщо кілька запусків пропаде, посилання не встигнуть протухнути.
+    - cron: '17 * * * *'
   workflow_dispatch:        # ручний запуск кнопкою на сайті
   push:
     paths:
@@ -23,7 +23,7 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -75,19 +75,22 @@ jobs:
 
       - name: Generate playlist
         run: |
-          if python update_playlist.py; then exit 0; fi
-          # Не вийшло жодного каналу: беремо нову адресу WARP і пробуємо ще раз
-          if command -v warp-cli >/dev/null; then
-            echo "Повтор з новою адресою WARP…"
+          # До 3 спроб; перед кожним повтором беремо нову адресу WARP
+          for attempt in 1 2 3; do
+            if python update_playlist.py; then exit 0; fi
+            [ "$attempt" = 3 ] && break
+            command -v warp-cli >/dev/null || continue
+            echo "Спроба $attempt не вдалась — нова адреса WARP…"
             warp-cli --accept-tos disconnect || true
             warp-cli --accept-tos registration delete || true
+            sleep 5
             warp-cli --accept-tos registration new
             warp-cli --accept-tos mode proxy
             warp-cli --accept-tos proxy port 40000
             warp-cli --accept-tos connect
             for i in $(seq 1 15); do warp-cli --accept-tos status | grep -q Connected && break; sleep 2; done
-          fi
-          python update_playlist.py
+          done
+          exit 1
 
       - name: Commit and push
         if: always()
