@@ -42,6 +42,14 @@ jobs:
       - name: Install dependencies (завжди найновіший yt-dlp)
         run: pip install -U -r requirements-actions.txt
 
+      - name: PO-token provider (знижує блокування «not a bot»)
+        continue-on-error: true
+        run: |
+          docker run -d --name bgutil -p 4416:4416 --init brainicism/bgutil-ytdlp-pot-provider
+          pip install -U bgutil-ytdlp-pot-provider
+          for i in $(seq 1 20); do curl -fsS http://127.0.0.1:4416/ping >/dev/null 2>&1 && break; sleep 2; done
+          curl -fsS http://127.0.0.1:4416/ping && echo " <- PO-token сервер працює" || echo "::warning::PO-token сервер не запустився"
+
       - name: VPN Cloudflare WARP (обхід блокування IP GitHub)
         continue-on-error: true
         run: |
