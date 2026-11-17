@@ -7,6 +7,7 @@ import sys
 import time
 from datetime import datetime, timezone
 
+from external_streams import external_url, is_external
 from yt_resolver import best_quality_manifest, load_channels, resolve
 
 OUTPUT = "streams.m3u8"
@@ -25,17 +26,40 @@ def main():
         return 1
 
     lines = ["#EXTM3U"]
-    ok = 0
+    ok = yt_ok = yt_total = yt_failed = 0
+    yt_blocked = False
     for i, ch in enumerate(channels, 1):
         print(f"[{i}/{len(channels)}] {ch['name']} … ", end="", flush=True)
+        grp = f' group-title="{ch["group"]}"' if ch["group"] else ""
+
+        if is_external(ch["url"]):
+            try:
+                url, height = external_url(ch)
+            except Exception as e:  # noqa: BLE001
+                print(f"НЕ ПРАЦЮЄ: {e}")
+                lines.append(f"# {ch['name']}: недоступний ({str(e)[:120]})")
+                continue
+            ok += 1
+            via = "через воркер" if "/best?u=" in url else "напряму"
+            print(f"OK, {height or '?'}p, {via}")
+            lines.append(f'#EXTINF:-1 tvg-id="{ch["key"]}"{grp},{ch["name"]}')
+            lines.append(url)
+            continue
+
+        yt_total += 1
+        if yt_blocked:
+            print("пропущено (YouTube блокує адресу)")
+            lines.append(f"# {ch['name']}: пропущено (YouTube блокує адресу)")
+            continue
         try:
             url, expire = resolve(ch["url"], retries=1)
         except RuntimeError as e:
             print(f"ПОМИЛКА: {e}")
             lines.append(f"# {ch['name']}: недоступний ({str(e)[:120]})")
-            if ok == 0 and i >= 2 and "not a bot" in str(e):
-                print("Перші канали заблоковано («not a bot») — схоже, заблокована вся адреса. Зупиняюсь.")
-                break
+            yt_failed += 1
+            if yt_ok == 0 and yt_failed >= 2 and "not a bot" in str(e):
+                print("Перші канали YouTube заблоковано («not a bot») — схоже, заблокована вся адреса.")
+                yt_blocked = True
             continue
         if BEST_QUALITY:
             try:
@@ -53,9 +77,9 @@ def main():
         else:
             quality = "усі"
         ok += 1
+        yt_ok += 1
         mins = int((expire - time.time()) / 60)
         print(f"OK, якість {quality} (діє ще {mins} хв)")
-        grp = f' group-title="{ch["group"]}"' if ch["group"] else ""
         lines.append(f'#EXTINF:-1 tvg-id="{ch["key"]}"{grp},{ch["name"]}')
         lines.append(url)
         time.sleep(2)  # не засипати YouTube запитами
@@ -63,9 +87,9 @@ def main():
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     lines.append(f"# Оновлено: {now}, в ефірі {ok}/{len(channels)}")
 
-    if ok == 0:
-        # Не затираємо попередній робочий плейлист порожнім
-        print("Жодного каналу не отримано — streams.m3u8 не змінюю")
+    if ok == 0 or (yt_total and yt_ok == 0):
+        # Не затираємо попередній плейлист: у ньому ще можуть бути робочі посилання YouTube
+        print("Канали YouTube не отримано — streams.m3u8 не змінюю")
         return 1
 
     with open(OUTPUT, "w", encoding="utf-8") as f:

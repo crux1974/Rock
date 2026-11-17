@@ -82,6 +82,9 @@ jobs:
           fi
 
       - name: Generate playlist
+        env:
+          # Воркер «найвищої якості» (Cloudflare). Якщо недоступний — прямі посилання.
+          BEST_PROXY: https://best.vital-shevchuk.workers.dev
         run: |
           # До 3 спроб; перед кожним повтором беремо нову адресу WARP
           for attempt in 1 2 3; do
