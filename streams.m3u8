@@ -1,22 +1,22 @@
 #EXTM3U
 #EXTINF:-1 tvg-id="sharptone_records_tv" group-title="Rock",SharpTone Records TV
-https://raw.githubusercontent.com/crux1974/Rock/main/channels/sharptone_records_tv.m3u8?t=1794874085
+https://raw.githubusercontent.com/crux1974/Rock/main/channels/sharptone_records_tv.m3u8?t=1794874218
 #EXTINF:-1 tvg-id="frontiers_music_srl_tv" group-title="Rock",Frontiers Music srl TV
-https://raw.githubusercontent.com/crux1974/Rock/main/channels/frontiers_music_srl_tv.m3u8?t=1794874090
+https://raw.githubusercontent.com/crux1974/Rock/main/channels/frontiers_music_srl_tv.m3u8?t=1794874223
 #EXTINF:-1 tvg-id="thriller_records_tv" group-title="Rock",Thriller Records TV
-https://raw.githubusercontent.com/crux1974/Rock/main/channels/thriller_records_tv.m3u8?t=1794874094
+https://raw.githubusercontent.com/crux1974/Rock/main/channels/thriller_records_tv.m3u8?t=1794874227
 #EXTINF:-1 tvg-id="hate5six_tv" group-title="Rock",hate5six TV
-https://raw.githubusercontent.com/crux1974/Rock/main/channels/hate5six_tv.m3u8?t=1794874099
+https://raw.githubusercontent.com/crux1974/Rock/main/channels/hate5six_tv.m3u8?t=1794874231
 #EXTINF:-1 tvg-id="kiss_tv" group-title="Rock",KISS TV
-https://raw.githubusercontent.com/crux1974/Rock/main/channels/kiss_tv.m3u8?t=1794874103
+https://raw.githubusercontent.com/crux1974/Rock/main/channels/kiss_tv.m3u8?t=1794874235
 #EXTINF:-1 tvg-id="metallica_tv" group-title="Rock",Metallica TV
-https://raw.githubusercontent.com/crux1974/Rock/main/channels/metallica_tv.m3u8?t=1794874106
+https://raw.githubusercontent.com/crux1974/Rock/main/channels/metallica_tv.m3u8?t=1794874239
 #EXTINF:-1 tvg-id="nuclear_blast_records_tv" group-title="Rock",Nuclear Blast Records TV
-https://raw.githubusercontent.com/crux1974/Rock/main/channels/nuclear_blast_records_tv.m3u8?t=1794874113
+https://raw.githubusercontent.com/crux1974/Rock/main/channels/nuclear_blast_records_tv.m3u8?t=1794874242
 #EXTINF:-1 tvg-id="nuclear_blast_thrash_speed_metal_tv" group-title="Rock",Nuclear Blast Thrash/Speed Metal TV
-https://raw.githubusercontent.com/crux1974/Rock/main/channels/nuclear_blast_thrash_speed_metal_tv.m3u8?t=1794874117
+https://raw.githubusercontent.com/crux1974/Rock/main/channels/nuclear_blast_thrash_speed_metal_tv.m3u8?t=1794874246
 #EXTINF:-1 tvg-id="nuclear_blast_power_heavy_symphonic_metal_tv" group-title="Rock",Nuclear Blast Power/Heavy/Symphonic Metal TV
-https://raw.githubusercontent.com/crux1974/Rock/main/channels/nuclear_blast_power_heavy_symphonic_metal_tv.m3u8?t=1794874121
+https://raw.githubusercontent.com/crux1974/Rock/main/channels/nuclear_blast_power_heavy_symphonic_metal_tv.m3u8?t=1794874249
 #EXTINF:-1 tvg-id="xite_rock_x_metal" group-title="Rock TV",XITE Rock x Metal
 https://d198ro05q94rc4.cloudfront.net/XITE_Rock_On.m3u8
 #EXTINF:-1 tvg-id="stingray_classic_rock" group-title="Rock TV",Stingray Classic Rock
@@ -25,7 +25,6 @@ https://lotus.stingray.com/manifest/ose-101ads-montreal/samsungtvplus/master.m3u
 https://lotus.stingray.com/manifest/ose-102ads-montreal/samsungtvplus/master.m3u8
 #EXTINF:-1 tvg-id="now_rock" group-title="Rock TV",NOW Rock
 https://best.vital-shevchuk.workers.dev/best?u=https%3A%2F%2Flightning-now90s-samsungnz.amagi.tv%2Fplaylist.m3u8
-# Vevo Retro Rock: недоступний (HTTPSConnectionPool(host='d2lyea6if8kkz9.cloudfront.net', port=443): Max retries exceeded with url: /playlist/amg00056-v)
 #EXTINF:-1 tvg-id="eska_rock_tv" group-title="Rock TV",Eska Rock TV
 http://92.114.85.87:8016/play/a005/index.m3u8
 #EXTINF:-1 tvg-id="rock_tv_romania" group-title="Rock TV",Rock TV (Romania)
@@ -48,4 +47,4 @@ https://best.vital-shevchuk.workers.dev/best?u=https%3A%2F%2Fjmp2.uk%2Fplu-61d4b
 https://best.vital-shevchuk.workers.dev/best?u=https%3A%2F%2Fjmp2.uk%2Fplu-6568a78d635c3c0008765f41.m3u8
 #EXTINF:-1 tvg-id="rock_tv_italy" group-title="Rock TV",Rock TV (Italy)
 https://best.vital-shevchuk.workers.dev/best?u=https%3A%2F%2Fjmp2.uk%2Fstvp-ITBC1100011RK
-# Оновлено: 2026-11-17 00:09 UTC, в ефірі 24/25
+# Оновлено: 2026-11-17 00:11 UTC, в ефірі 24/24
