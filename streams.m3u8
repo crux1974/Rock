@@ -1,25 +1,21 @@
 #EXTM3U
-#EXTINF:-1 tvg-id="sharptone_records_tv" group-title="Rock",SharpTone Records TV
-https://raw.githubusercontent.com/crux1974/Rock/main/channels/sharptone_records_tv.m3u8?t=1795591131
-#EXTINF:-1 tvg-id="frontiers_music_srl_tv" group-title="Rock",Frontiers Music srl TV
-https://raw.githubusercontent.com/crux1974/Rock/main/channels/frontiers_music_srl_tv.m3u8?t=1795591135
-#EXTINF:-1 tvg-id="thriller_records_tv" group-title="Rock",Thriller Records TV
-https://raw.githubusercontent.com/crux1974/Rock/main/channels/thriller_records_tv.m3u8?t=1795591140
-# hate5six TV: недоступний (ERROR: [youtube] 71rahWgFHBs: This live event will begin in 33 hours.)
-#EXTINF:-1 tvg-id="kiss_tv" group-title="Rock",KISS TV
-https://raw.githubusercontent.com/crux1974/Rock/main/channels/kiss_tv.m3u8?t=1795591175
+# SharpTone Records TV: недоступний (ERROR: [youtube] -BJg05my_xE: Failed to extract any player response; please report this issue on  https://github.com/yt-)
+# Frontiers Music srl TV: недоступний (ERROR: [youtube] UiCK7SCpSIA: Failed to extract any player response; please report this issue on  https://github.com/yt-)
+# Thriller Records TV: недоступний (ERROR: [youtube] O_ZO3hzSdAs: Failed to extract any player response; please report this issue on  https://github.com/yt-)
+# hate5six TV: недоступний (ERROR: [youtube] 71rahWgFHBs: Failed to extract any player response; please report this issue on  https://github.com/yt-)
+# KISS TV: недоступний (ERROR: [youtube] TDSCd8xUpcs: Failed to extract any player response; please report this issue on  https://github.com/yt-)
 #EXTINF:-1 tvg-id="scorpions_tv" group-title="Rock",Scorpions TV
-https://raw.githubusercontent.com/crux1974/Rock/main/channels/scorpions_tv.m3u8?t=1795591178
+https://raw.githubusercontent.com/crux1974/Rock/main/channels/scorpions_tv.m3u8?t=1795595380
 #EXTINF:-1 tvg-id="nuclear_blast_records_tv" group-title="Rock",Nuclear Blast Records TV
-https://raw.githubusercontent.com/crux1974/Rock/main/channels/nuclear_blast_records_tv.m3u8?t=1795591182
+https://raw.githubusercontent.com/crux1974/Rock/main/channels/nuclear_blast_records_tv.m3u8?t=1795595383
 #EXTINF:-1 tvg-id="nuclear_blast_thrash_speed_metal_tv" group-title="Rock",Nuclear Blast Thrash/Speed Metal TV
-https://raw.githubusercontent.com/crux1974/Rock/main/channels/nuclear_blast_thrash_speed_metal_tv.m3u8?t=1795591186
+https://raw.githubusercontent.com/crux1974/Rock/main/channels/nuclear_blast_thrash_speed_metal_tv.m3u8?t=1795595386
 #EXTINF:-1 tvg-id="nuclear_blast_power_heavy_symphonic_metal_tv" group-title="Rock",Nuclear Blast Power/Heavy/Symphonic Metal TV
-https://raw.githubusercontent.com/crux1974/Rock/main/channels/nuclear_blast_power_heavy_symphonic_metal_tv.m3u8?t=1795591189
+https://raw.githubusercontent.com/crux1974/Rock/main/channels/nuclear_blast_power_heavy_symphonic_metal_tv.m3u8?t=1795595389
 #EXTINF:-1 tvg-id="the_metal_station" group-title="Rock",The Metal Station
-https://raw.githubusercontent.com/crux1974/Rock/main/channels/the_metal_station.m3u8?t=1795591193
+https://raw.githubusercontent.com/crux1974/Rock/main/channels/the_metal_station.m3u8?t=1795595393
 #EXTINF:-1 tvg-id="the_80s_rock" group-title="Rock",The 80s Rock
-https://raw.githubusercontent.com/crux1974/Rock/main/channels/the_80s_rock.m3u8?t=1795591197
+https://raw.githubusercontent.com/crux1974/Rock/main/channels/the_80s_rock.m3u8?t=1795595396
 #EXTINF:-1 tvg-id="gunz_n_roses_tv" group-title="Rock",Gunz N' Roses TV
-https://raw.githubusercontent.com/crux1974/Rock/main/channels/gunz_n_roses_tv.m3u8?t=1795591200
-# Оновлено: 2026-11-25 07:20 UTC, в ефірі 11/12
+https://raw.githubusercontent.com/crux1974/Rock/main/channels/gunz_n_roses_tv.m3u8?t=1795595400
+# Оновлено: 2026-11-25 08:30 UTC, в ефірі 7/12
